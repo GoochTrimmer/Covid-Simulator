@@ -93,7 +93,7 @@ public class CovidSimController {
 		
 		//Setup Canvas and Draw
 		System.out.println("Init");
-		world.resize(935, 546);
+		world.resize(935, 483);
 		world.getChildren().clear();
 		sim =  new Simulation(world, popSize);
 		tickField.setText("" + 0);
@@ -190,6 +190,8 @@ public class CovidSimController {
 		clock.resetTicks();
 		tickField.setText("" + clock.getTicks());
 		world.getChildren().clear();
+		System.out.println(world.getHeight());
+		System.out.println(world.getWidth());
 		setSize();
 		setSpeed();
 		setRecovery();
