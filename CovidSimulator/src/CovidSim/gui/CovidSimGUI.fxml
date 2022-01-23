@@ -68,8 +68,6 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Slider>
-                  <Label text="Speed" />
-                  <Slider fx:id="speedSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="2" showTickLabels="true" showTickMarks="true" value="2.0" />
                   <Label text="Recovery Rate" />
                   <Slider fx:id="recoverySlider" blockIncrement="2.0" majorTickUnit="2.0" max="8.0" min="2.0" showTickLabels="true" showTickMarks="true" value="2.0" />
                   <Label text="Social Distance Factor" />
@@ -87,6 +85,8 @@
                   <Slider fx:id="infectionRadiusSlider" majorTickUnit="2.0" max="10.0" min="4.0" prefWidth="222.0" showTickLabels="true" showTickMarks="true" value="4.0" />
                   <Label text="Population Size" />
                   <Slider fx:id="populationSlider" blockIncrement="100.0" max="1000.0" min="100.0" prefWidth="222.0" showTickLabels="true" showTickMarks="true" />
+                  <Label text="Speed" />
+                  <Slider fx:id="speedSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="2" prefWidth="222.0" showTickLabels="true" showTickMarks="true" value="2.0" />
                </children>
             </VBox>
          </center>
