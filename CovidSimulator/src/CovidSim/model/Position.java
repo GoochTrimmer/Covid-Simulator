@@ -38,20 +38,20 @@ public class Position {
 	
 	//Movement Function
 	public void move(Heading heading, Pane world, double speed, Position origin) {
-		x += heading.getDx(speed);
-		y += heading.getDy(speed);
+		x += heading.getDx();
+		y += heading.getDy();
 		
 		//Check if Collided with edge of Pane and Bounce || Obey social distance factor
 		if(x < Person.radius || x > world.getWidth() - Person.radius  ||
 				distance(origin) > Person.socialDistanceFactor) {
 			heading.bounceX();
-			x += heading.getDx(speed);
+			x += heading.getDx();
 		}
 		
 		if(y < Person.radius || y > world.getHeight() - Person.radius ||
 				distance(origin) > Person.socialDistanceFactor) {
 			heading.bounceY();
-			y += heading.getDy(speed);
+			y += heading.getDy();
 		}
 	}
 	

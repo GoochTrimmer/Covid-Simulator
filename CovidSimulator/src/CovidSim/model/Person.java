@@ -8,9 +8,9 @@ public class Person {
 	
 	public static int radius = 5;
 	public static int infectionZone = radius + 5;
-	public static int recoveryTime = 5*50;
+	public static int recoveryTime = 2*60;
 	public static double speed = 1;
-	public static int socialDistanceFactor = 200;
+	public static int socialDistanceFactor = 10;
 	
 	private State state;
 	private Heading heading;

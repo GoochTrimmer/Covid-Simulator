@@ -3,7 +3,7 @@ package CovidSim.model;
 public class Heading {
 	
 	//Speed and Direction Initialization
-	public static double speed = 1;
+	public static double speed = Person.speed;
 	private double dx, dy;
 	
 	public Heading(double dx, double dy) {
@@ -11,8 +11,8 @@ public class Heading {
 		this.dy = dy;
 	}
 	
-	public double getDx(double speed) { return dx; }
-	public double getDy(double speed) { return dy; }
+	public double getDx() { return dx; }
+	public double getDy() { return dy; }
 	
 	public Heading() {
 		double dir = Math.random() * 2 * Math.PI; //Random Angle in Radians

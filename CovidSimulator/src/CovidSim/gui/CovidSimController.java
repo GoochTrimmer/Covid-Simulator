@@ -44,8 +44,15 @@ public class CovidSimController {
 	Slider socialDistanceSlider;
 	
 	@FXML
+	Slider infectionRadiusSlider;
+	
+	@FXML
+	Slider populationSlider;
+	
+	@FXML
 	TextField tickField;
 	
+	int popSize = 500;
 	
 	Simulation sim;
 	
@@ -86,9 +93,9 @@ public class CovidSimController {
 		
 		//Setup Canvas and Draw
 		System.out.println("Init");
-		world.resize(973, 561);
+		world.resize(935, 546);
 		world.getChildren().clear();
-		sim =  new Simulation(world, 700);
+		sim =  new Simulation(world, popSize);
 		tickField.setText("" + 0);
 		
 		
@@ -127,6 +134,24 @@ public class CovidSimController {
 			
 		});
 		
+		infectionRadiusSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setInfectionRadius();
+				sim.draw();
+			}
+			
+		});
+		
+		populationSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setPopulationSize();
+				sim.draw();
+			}
+			
+		});
+		
 		//Start Clock and setup Canvas
 		clock = new Movement();
 		world.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
@@ -142,11 +167,19 @@ public class CovidSimController {
 	}
 	
 	public void setSpeed() {
-		Person.speed = speedSlider.getValue();
+		Heading.speed = speedSlider.getValue();
 	}
 	
 	public void setSocialDistanceFactor() {
 		Person.socialDistanceFactor = (int) socialDistanceSlider.getValue();
+	}
+	
+	public void setInfectionRadius() {
+		Person.infectionZone = (int) infectionRadiusSlider.getValue() + Person.radius;
+	}
+	
+	public void setPopulationSize() {
+		popSize = (int) populationSlider.getValue();
 	}
 	
 	
@@ -157,7 +190,12 @@ public class CovidSimController {
 		clock.resetTicks();
 		tickField.setText("" + clock.getTicks());
 		world.getChildren().clear();
-		sim =  new Simulation(world, 700);
+		setSize();
+		setSpeed();
+		setRecovery();
+		setSocialDistanceFactor();
+		setPopulationSize();
+		sim =  new Simulation(world, popSize);
 	}
 	
 	@FXML 
