@@ -53,19 +53,7 @@ public class Position {
 			heading.bounceY();
 			y += heading.getDy();
 		}
+		
 	}
-	
-	//TODO:
-	//Add dynamic collision logic for draw objects
-	
-	//Collision Check 
-	public boolean collision(Position other) {
-		return distance(other) < 2 * Person.infectionZone;
-	}
-	
-
-	
-	//Attempt to apply Collision Range
-	
 	
 }

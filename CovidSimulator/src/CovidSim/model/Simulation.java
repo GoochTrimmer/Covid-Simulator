@@ -13,14 +13,24 @@ public class Simulation {
 	public Simulation(Pane world, int popSize) {
 		population =  new HashMap<Person, Integer>();
 		
+//		for(int i=0; i<popSize; i++) {
+//			population.put(new Person(State.SUCEPTIBLE, world), i);
+//		}
+//		
+//		population.put(new Person(State.INFECTED_BOTH, world), popSize++);
+//		population.put(new Person(State.INFECTED_COVID, world), popSize++);
+//		population.put(new Person(State.INFECTED_FLU, world), popSize++);
+//		draw();
+		
 		for(int i=0; i<popSize; i++) {
 			//Randomly Select a portion to be infected
-			population.put(new Person(State.SUCEPTIBLE, world), i);
+			population.put(new Person(world, "sus"), i);
 		}
-		population.put(new Person(State.INFECTED, world), popSize++);
-		draw();
+		
+		population.put(new Person(world, "covid"), popSize++);
+		population.put(new Person(world, "flu"), popSize++);
 	}
-	
+
 
 	public HashMap<Person, Integer> getPopulation() {
 		return population;
@@ -57,9 +67,10 @@ public class Simulation {
 		//Pass Lambda expression to forEach()
 		population.forEach((key, value) -> {
 			population.forEach((key2, value2) -> {
+				//Spread
 				if(key != key2) {
 					key.spread(key2);
-				}
+				}	
 			});
 		});
 		

@@ -1,8 +1,11 @@
 package CovidSim.gui;
 
+import CovidSim.model.CovidInterface;
 import CovidSim.model.Heading;
 import CovidSim.model.Person;
 import CovidSim.model.Simulation;
+import CovidSim.model.State;
+import CovidSim.model.VirusInterface;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +18,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class CovidSimController {
+public class CovidSimController{
 	
 	//GUI Elements
 	
@@ -32,19 +35,28 @@ public class CovidSimController {
 	Button stepButton;
 	
 	@FXML
-	Slider sizeSlider;
+	Slider covidSizeSlider;
+	
+	@FXML
+	Slider fluSizeSlider;
 	
 	@FXML
 	Slider speedSlider;
 	
 	@FXML
-	Slider recoverySlider;
+	Slider covidRecoverySlider;
+	
+	@FXML
+	Slider fluRecoverySlider;
 	
 	@FXML
 	Slider socialDistanceSlider;
 	
 	@FXML
-	Slider infectionRadiusSlider;
+	Slider covidRadiusSlider;
+	
+	@FXML 
+	Slider fluRadiusSlider;
 	
 	@FXML
 	Slider populationSlider;
@@ -53,6 +65,21 @@ public class CovidSimController {
 	TextField tickField;
 	
 	int popSize = 500;
+	
+	//Dynamic Parameter 
+	public static int covidInfectionRadius;
+	public static int fluInfectionRadius;
+	
+	public static int covidRecovery;
+	public static int fluRecovery;
+	
+	public static int covidSize;
+	public static int fluSize;
+	
+	public int getTest() {
+		return (int) covidSizeSlider.getValue();
+	}
+	
 	
 	Simulation sim;
 	
@@ -95,33 +122,28 @@ public class CovidSimController {
 		System.out.println("Init");
 		world.resize(935, 483);
 		world.getChildren().clear();
+		setCovidSize();
+		setFluSize();
+		setCovidInfectionRadius();
+		setFluInfectionRadius();
+		setSpeed();
+		setCovidRecovery();
+		setFluRecovery();
+		setSocialDistanceFactor();
+		setPopulationSize();
 		sim =  new Simulation(world, popSize);
+		sim.draw();
 		tickField.setText("" + 0);
 		
 		
 		//Read and Update values from Sliders
-		sizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		
+		//Common Parameters
+		populationSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				setSize();
+				setPopulationSize();
 				sim.draw();
-			}
-			
-		});
-		
-		speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				setSpeed();
-				System.out.println(Person.speed);
-			}
-			
-		});
-		
-		recoverySlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				setRecovery();
 			}
 			
 		});
@@ -134,19 +156,65 @@ public class CovidSimController {
 			
 		});
 		
-		infectionRadiusSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				setInfectionRadius();
+				setSpeed();
+				System.out.println(Person.speed);
 				sim.draw();
 			}
 			
 		});
 		
-		populationSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		//Virus Parameters
+		covidSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				setPopulationSize();
+				setCovidSize();
+				sim.draw();
+			}
+			
+		});
+		
+		fluSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setFluSize();
+				sim.draw();
+			}
+			
+		});
+		
+		
+		covidRecoverySlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setCovidRecovery();
+			}
+			
+		});
+		
+		fluRecoverySlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setFluRecovery();
+			}
+			
+		});
+		
+		covidRadiusSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setCovidInfectionRadius();
+				sim.draw();
+			}
+			
+		});
+		
+		fluRadiusSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setFluInfectionRadius();
 				sim.draw();
 			}
 			
@@ -158,12 +226,25 @@ public class CovidSimController {
 	}
 	
 	//Slider parameter functions
-	public void setSize() {
-		Person.radius = (int) sizeSlider.getValue();
+	public void setCovidSize() {
+		covidSize = (int) covidSizeSlider.getValue();
+		Person.virusSize = (int) covidSizeSlider.getValue();
 	}
 	
-	public void setRecovery() {
-		Person.recoveryTime = 60 * (int) recoverySlider.getValue();
+	public void setFluSize() {
+		fluSize = (int) fluSizeSlider.getValue();
+	}
+	
+	public void setCovidRecovery() {
+		covidRecovery = 60 * (int) covidRecoverySlider.getValue();
+		System.out.println(covidRecovery);
+		System.out.println(fluRecovery);
+	}
+	
+	public void setFluRecovery() {
+		fluRecovery = 60 * (int) fluRecoverySlider.getValue();
+		System.out.println(covidRecovery);
+		System.out.println(fluRecovery);
 	}
 	
 	public void setSpeed() {
@@ -174,14 +255,23 @@ public class CovidSimController {
 		Person.socialDistanceFactor = (int) socialDistanceSlider.getValue();
 	}
 	
-	public void setInfectionRadius() {
-		Person.infectionZone = (int) infectionRadiusSlider.getValue() + Person.radius;
+	//COVID Infection Radius
+	public void setCovidInfectionRadius() {
+		covidInfectionRadius = (int) covidRadiusSlider.getValue() + Person.radius;
 	}
+	
+	public int getCovidInfectionRadius() {
+		return (int) covidRadiusSlider.getValue() + Person.radius;
+	}
+	
+	public void setFluInfectionRadius() {
+		fluInfectionRadius = (int) fluRadiusSlider.getValue() + Person.radius;
+	}
+	
 	
 	public void setPopulationSize() {
 		popSize = (int) populationSlider.getValue();
 	}
-	
 	
 	//Button Functions
 	@FXML
@@ -192,12 +282,14 @@ public class CovidSimController {
 		world.getChildren().clear();
 		System.out.println(world.getHeight());
 		System.out.println(world.getWidth());
-		setSize();
+		setCovidSize();
+		setFluSize();
 		setSpeed();
-		setRecovery();
+		setCovidRecovery();
 		setSocialDistanceFactor();
 		setPopulationSize();
 		sim =  new Simulation(world, popSize);
+		sim.draw();
 	}
 	
 	@FXML 
@@ -227,6 +319,6 @@ public class CovidSimController {
 		stopButton.setDisable(stop);
 		stepButton.setDisable(step);
 	}
-
 	
+		
 }
