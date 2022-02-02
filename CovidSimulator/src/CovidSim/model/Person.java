@@ -1,24 +1,25 @@
 package CovidSim.model;
 
-import CovidSim.gui.CovidSimController;
+import Virus.Covid;
+import Virus.Flu;
+import Virus.Multiple;
+import Virus.Susceptible;
+import Virus.Virus;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Person implements VirusInterface{
+public class Person {
 	
 	//Person Class unique parameters
-	public static int radius = 5;
-	public static int infectionZone;
-	public int recoveryTime = 10000;
 	public static double speed = 1;
 	
 	public static int socialDistanceFactor = 10;
 	
-	// Virus Interface
 	public static int virusSize = 5;
+	public static int recoveryDuration;
 	private String virusType = "covid";
-	private int virusInfectionRadius = 10;
+	public static int virusInfectionRadius = 10;
 	private Color virusColor = Color.PURPLE;
 	
 //	private State state;
@@ -27,23 +28,23 @@ public class Person implements VirusInterface{
 	private Position origin;
 	private Circle cPerson, cZone;
 	private Pane world;
+	Virus virus = new Virus();
 	private int infectedTime = 0;
-	CovidSimController controller;
 	
 	//Person Constructor
-	public Person(Pane world, String virusType) {
-//		this.state = state;
+	public Person(Pane world, String virusType, Virus virus) {
+		
 		//Initialize Person Object
+		this.virus = virus;
+		setupVirus();
 		this.virusType = virusType;
 		this.world = world;
 		this.heading =  new Heading();
 		this.pos = new Position(world);
 		this.origin = new Position(pos.getX(), pos.getY());
-		this.cPerson = new Circle(getVirusSize(), getVirusColor());
-		this.cZone =  new Circle(getVirusInfectionRadius());
-		
+		this.cPerson = new Circle(virusSize, virusColor);
+		this.cZone =  new Circle(virusInfectionRadius);
 		cPerson.setStroke(Color.BLACK);
-//		cZone.setStroke(Color.PURPLE);
 		cZone.setFill(new Color(0,0,0,0));
 		
 		//Set Person Position on World
@@ -57,188 +58,117 @@ public class Person implements VirusInterface{
 		world.getChildren().add(cZone);
 	}
 		
-		//State
-//		public State getState() {
-//			return state;
-//		}
-//		
-//		public void setState(State state) {
-//			this.state = state;
-//			cPerson.setFill(state.getColor());
-//		}
-	
 		
 		public void move() {
 			pos.move(heading, world, speed, origin);
 		}
 		
-		public void setRecovery(int r) {
-			this.recoveryTime = r;
-		}
-		
 		//Draw Person [Circle]
 		public void draw() {
-			//Update size, color
-			cPerson.setRadius(getVirusSize());
-			cPerson.setFill(getVirusColor());
+			setupVirus();
+			
+			//Person Size
+			cPerson.setRadius(virusSize);
+			cPerson.setFill(virusColor);
 			cPerson.setTranslateX(pos.getX());
 			cPerson.setTranslateY(pos.getY());
-		}
-		
-		//Draw Infection Zone [Ring]
-		public void drawZone(Person p) {
-				
-				//Use state to change Person's characteristics based on user parameters
-//				switch(p.getState()) {
-//				case INFECTED_BOTH:
-//					break;
-//				case INFECTED_COVID:
-//					cPerson.setRadius(sim.covidSize);
-//					cZone.setRadius(sim.covidInfectionRadius);
-//					setRecovery(sim.covidRecovery);
-//					break;
-//				case INFECTED_FLU:
-//					cPerson.setRadius(sim.fluSize);
-//					cZone.setRadius(sim.fluInfectionRadius);
-//					setRecovery(sim.fluRecovery);
-//					break;
-//				case RECOVERED:
-//					break;
-//				case SUCEPTIBLE:
-//					break;
-//				default:
-//					cZone.setRadius(10);
-//					break;
 			
-//				cZone.setRadius(5);
-				cZone.setTranslateX(pos.getX());
-				cZone.setTranslateY(pos.getY());
-				
-				//Make a circle without color for ring effect
-				cZone.setStroke(Color.PURPLE);
-				cZone.setFill(new Color(0,0,0,0));
-				
-//				if(p.getState() == State.INFECTED_COVID || state == State.INFECTED_FLU || state == State.INFECTED_BOTH)
-//					cZone.setVisible(true);
-//				else
-//					cZone.setVisible(false);
-				
-				if(p.getVirusType().equals("covid") || p.getVirusType().equals("flu") || p.getVirusType().equals("multiple"))
-					cZone.setVisible(true);
-				else
-					cZone.setVisible(false);
-			}
+			//Person Infection Radius
+			cZone.setRadius(virusInfectionRadius);
+			cZone.setTranslateX(pos.getX());
+			cZone.setTranslateY(pos.getY());
+			cZone.setStroke(Color.PURPLE);
+			cZone.setFill(new Color(0,0,0,0));
+			
+			//Only show Infection Radius if Person is infected
+			if(virusType.equals("covid") || virusType.equals("flu") || virusType.equals("multiple"))
+				cZone.setVisible(true);
+			else
+				cZone.setVisible(false);
+		}
 		
 		
 		//Check if Person is within the infection zone and update state
 		public void spread(Person other) {
-			
+			setupVirus();
 			///INFECTED_COVID and SUCEPTIBLE 
-			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
-				if (other.getVirusType().equals("covid") && virusType.equals("sus")) {
-					setVirusType("covid");
 
+			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
+				if (other.virusType.equals("covid") && virusType.equals("sus")) {
+					virusType = "covid";
 					}
 				}
 			
 			///INFECTED_FLU and SUCEPTIBLE 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
-				if (other.getVirusType().equals("flu") && getVirusType().equals("sus")) {
-					setVirusType("flu");
+				if (other.virusType.equals("flu") && virusType.equals("sus")) {
+					virusType = "flu";
 					}
 				}
 //			
 			///INFECTED_FLU and INFECTED_COVID 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
-				if (other.getVirusType().equals("flu") && getVirusType().equals("covid")) {
-					setVirusType("multiple");
+				if (other.virusType.equals("flu") && virusType.equals("covid")) {
+					virusType = "multiple";
 					}
 				}
 			}	
 		
 		public void checkRecovery(Pane world, Person p) {
-			if(getVirusType().equals("covid") || getVirusType().equals("flu")  || getVirusType().equals("multiple")) {
+			setupVirus();
+			if(virusType.equals("covid") || virusType.equals("flu")  || virusType.equals("multiple")) {
 				infectedTime++;
-				if(infectedTime > recoveryTime) {
-					setVirusType("recovered");
+				if(infectedTime > recoveryDuration) {
+					virusType = "recovered";
 				}
 			}
 	}
 		
-		public void setVirusSize(int s) {
-			Person.virusSize = s;
-		}
-		
-		//Virus Interface Methods
-		@Override
-		public String getVirusType() {
-			return this.virusType;
-		}
-
-		@Override
-		public void setVirusType(String t) {
-			this.virusType = t;
-		}
-
-		@Override
-		public Color getVirusColor() {
-			
+		public void setupVirus() {
 			switch(virusType) {
 			case "covid":
-				virusColor = Color.RED;
+				virusSize = Covid.size;
+				virusInfectionRadius = Covid.infectionRadius;
+				virusType =  Covid.virusType;
+				virusColor = Covid.virusColor;
+				recoveryDuration = Covid.recoveryDuration;
 				break;
 			case "flu":
-				virusColor = Color.YELLOW;
+				virusSize = Flu.size;
+				virusInfectionRadius = Flu.infectionRadius;
+				virusType = Flu.virusType;
+				virusColor = Flu.virusColor;
+				recoveryDuration = Flu.recoveryDuration;
 				break;
 			case "multiple":
-				virusColor = Color.ORANGE;
+				virusSize = Multiple.size;
+				virusInfectionRadius = Multiple.infectionRadius;
+				virusType = Multiple.virusType;
+				virusColor = Multiple.virusColor;
+				recoveryDuration = Multiple.recoveryDuration;
 				break;
 			case "sus":
-				virusColor = Color.LIGHTBLUE;
+				virusSize = Susceptible.size;
+				virusInfectionRadius = Susceptible.infectionRadius;
+				virusType = Susceptible.virusType;
+				virusColor = Susceptible.virusColor;
 				break;
 			case "recovered":
+				virusSize = Susceptible.size;
+				virusType = "recovered";
 				virusColor = Color.GREEN;
 				break;
 			default:
-				virusColor = Color.PURPLE;
+				
 			}
-			
-			return this.virusColor;
 		}
-
-		@Override
-		public int getVirusInfectionRadius() {
-			return this.virusInfectionRadius;
-		}
-
-		@Override
-		public int getVirusSize() {
-			
-			switch(virusType) {
-			case "covid":
-				virusSize = 7;
-				break;
-			case "flu":
-				virusSize = 5;
-				break;
-			case "multiple":
-				virusSize = 10;
-				break;
-			case "sus":
-				virusSize = 3;
-				break;
-			case "recovered":
-				virusSize = 3;
-				break;
-			default:
-				virusSize = 3;
-			}
-			
-			return Person.virusSize;
-		}		
 		
-		public int getTest() {
-			return CovidSimController.covidSize;
+		public void updateVirus(Virus virus) {
+				virusSize = virus.getSize();
+				virusInfectionRadius = virus.getInfectionRadius();
+				virusType =  virus.getVirusType();
+				virusColor = virus.getVirusColor();
+				recoveryDuration = virus.getRecoveryDuration();
+			}
 		}
-	
-}
+

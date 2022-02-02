@@ -1,11 +1,10 @@
 package CovidSim.gui;
 
-import CovidSim.model.CovidInterface;
 import CovidSim.model.Heading;
 import CovidSim.model.Person;
 import CovidSim.model.Simulation;
-import CovidSim.model.State;
-import CovidSim.model.VirusInterface;
+import Virus.Covid;
+import Virus.Flu;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -65,16 +64,6 @@ public class CovidSimController{
 	TextField tickField;
 	
 	int popSize = 500;
-	
-	//Dynamic Parameter 
-	public static int covidInfectionRadius;
-	public static int fluInfectionRadius;
-	
-	public static int covidRecovery;
-	public static int fluRecovery;
-	
-	public static int covidSize;
-	public static int fluSize;
 	
 	public int getTest() {
 		return (int) covidSizeSlider.getValue();
@@ -227,24 +216,19 @@ public class CovidSimController{
 	
 	//Slider parameter functions
 	public void setCovidSize() {
-		covidSize = (int) covidSizeSlider.getValue();
-		Person.virusSize = (int) covidSizeSlider.getValue();
+		Covid.size = (int) covidSizeSlider.getValue();
 	}
 	
 	public void setFluSize() {
-		fluSize = (int) fluSizeSlider.getValue();
+		Flu.size = (int) fluSizeSlider.getValue();
 	}
 	
 	public void setCovidRecovery() {
-		covidRecovery = 60 * (int) covidRecoverySlider.getValue();
-		System.out.println(covidRecovery);
-		System.out.println(fluRecovery);
+		Covid.recoveryDuration = 60 * (int) covidRecoverySlider.getValue();
 	}
 	
 	public void setFluRecovery() {
-		fluRecovery = 60 * (int) fluRecoverySlider.getValue();
-		System.out.println(covidRecovery);
-		System.out.println(fluRecovery);
+		Flu.recoveryDuration = 60 * (int) fluRecoverySlider.getValue();
 	}
 	
 	public void setSpeed() {
@@ -255,17 +239,12 @@ public class CovidSimController{
 		Person.socialDistanceFactor = (int) socialDistanceSlider.getValue();
 	}
 	
-	//COVID Infection Radius
 	public void setCovidInfectionRadius() {
-		covidInfectionRadius = (int) covidRadiusSlider.getValue() + Person.radius;
-	}
-	
-	public int getCovidInfectionRadius() {
-		return (int) covidRadiusSlider.getValue() + Person.radius;
+		Covid.infectionRadius = (int) covidRadiusSlider.getValue() + Person.virusSize;
 	}
 	
 	public void setFluInfectionRadius() {
-		fluInfectionRadius = (int) fluRadiusSlider.getValue() + Person.radius;
+		Flu.infectionRadius = (int) fluRadiusSlider.getValue() + Person.virusSize;
 	}
 	
 	
@@ -280,8 +259,6 @@ public class CovidSimController{
 		clock.resetTicks();
 		tickField.setText("" + clock.getTicks());
 		world.getChildren().clear();
-		System.out.println(world.getHeight());
-		System.out.println(world.getWidth());
 		setCovidSize();
 		setFluSize();
 		setSpeed();
@@ -290,6 +267,7 @@ public class CovidSimController{
 		setPopulationSize();
 		sim =  new Simulation(world, popSize);
 		sim.draw();
+		
 	}
 	
 	@FXML 

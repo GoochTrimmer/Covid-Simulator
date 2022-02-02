@@ -3,9 +3,15 @@ package CovidSim.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Virus.Covid;
+import Virus.Flu;
+import Virus.Susceptible;
 import javafx.scene.layout.Pane;
 
 public class Simulation {
+	
+	
+	
 	
 //	private ArrayList<Person> population;
 	private HashMap<Person, Integer> population;
@@ -24,11 +30,11 @@ public class Simulation {
 		
 		for(int i=0; i<popSize; i++) {
 			//Randomly Select a portion to be infected
-			population.put(new Person(world, "sus"), i);
+			population.put(new Person(world, "sus", new Susceptible()), i);
 		}
 		
-		population.put(new Person(world, "covid"), popSize++);
-		population.put(new Person(world, "flu"), popSize++);
+		population.put(new Person(world, "covid", new Covid()), popSize++);
+		population.put(new Person(world, "flu", new Flu()), popSize++);
 	}
 
 
@@ -51,7 +57,6 @@ public class Simulation {
 		//Pass Lambda expression to forEach()
 		population.forEach((key, value) -> {
 			key.draw();
-			key.drawZone(key);
 		});
 		
 //		ArrayList
