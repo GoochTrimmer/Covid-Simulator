@@ -3,7 +3,7 @@ package Virus;
 import javafx.scene.paint.Color;
 
 public class Covid extends Virus implements VirusInterface{
-	public static int size;
+	public static int size = 30;
 	public static int infectionRadius = 5;
 	public static int recoveryDuration = 300;
 	public static String virusType = "covid";
