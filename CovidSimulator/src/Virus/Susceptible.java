@@ -9,6 +9,7 @@ public class Susceptible extends Virus implements VirusInterface{
 	public static int recoveryDuration;
 	public static String virusType = "sus";
 	public static Color virusColor = Color.LIGHTBLUE;
+	public static int totalSusCount;
 	
 	@Override
 	public int getSize() {
@@ -37,15 +38,6 @@ public class Susceptible extends Virus implements VirusInterface{
 	@Override
 	public Color getVirusColor() {
 		return Susceptible.virusColor;
-	}
-	
-	@Override
-	public Virus spreadCovid(Virus virus) {
-		virus.setSize(Covid.size);
-		virus.setInfectionRadius(Covid.infectionRadius);
-		virus.setVirusType(Covid.virusType);
-		virus.setVirusColor(Covid.virusColor);
-		return virus;
 	}
 	
 }

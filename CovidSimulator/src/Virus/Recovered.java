@@ -2,69 +2,61 @@ package Virus;
 
 import javafx.scene.paint.Color;
 
-public class Virus implements VirusInterface{
-	
-	//Virus Parameters to be inherited by Virus child class
-	public static int size = 3;
+public class Recovered extends Virus implements VirusInterface{
+	public static int size = 5;
 	public static int infectionRadius = 5;
 	public static int recoveryDuration;
-	public static String virusType = "virus";
-	public static Color virusColor = Color.DARKBLUE;
-	public static int totalVirusCount;
+	public static String virusType = "recovered";
+	public static Color virusColor = Color.GREEN;
+	public static int totalRecoveredCount;
 	
 	@Override
 	public int getSize() {
-		return Virus.size;
+		return Recovered.size;
 	}
 	
 	@Override
 	public void setSize(int s) {
-		Virus.size = s;
+		Recovered.size = s;
 	}
 	
 	@Override
 	public int getInfectionRadius() {
-		return Virus.infectionRadius;
+		return Recovered.infectionRadius;
 	}
 	
 	@Override
 	public void setInfectionRadius(int r) {
-		Virus.infectionRadius = r;
+		Recovered.infectionRadius = r;
 	}
 	
 	@Override
 	public int getRecoveryDuration() {
-		return Virus.recoveryDuration;
+		return Recovered.recoveryDuration;
 	}
 	
 	@Override
 	public void setRecoveryDuration(int r) {
-		Virus.recoveryDuration = r;
+		Recovered.recoveryDuration = r;
 	}
 
 	@Override
 	public String getVirusType() {
-		return Virus.virusType;
+		return Recovered.virusType;
 	}
 
 	@Override
 	public void setVirusType(String t) {
-		Virus.virusType = t;
+		Recovered.virusType = t;
 	}
 	
 	@Override
 	public Color getVirusColor() {
-		return Virus.virusColor;
+		return Recovered.virusColor;
 	}
 	
 	@Override
 	public void setVirusColor(Color c) {
-		Virus.virusColor = c;
+		Recovered.virusColor = c;
 	}
-
-	@Override
-	public Virus transformVirus(Virus virus) {
-		return virus;
-	}
-		
 }

@@ -8,6 +8,7 @@ public class Multiple extends Virus implements VirusInterface{
 	public static int recoveryDuration = 10 * 60;
 	public static String virusType = "multiple";
 	public static Color virusColor = Color.ORANGE;
+	public static int totalMultipleCount;
 	
 	@Override
 	public int getSize() {
@@ -57,15 +58,5 @@ public class Multiple extends Virus implements VirusInterface{
 	@Override
 	public void setVirusColor(Color c) {
 		Multiple.virusColor = c;
-	}
-	
-	@Override
-	public Virus spreadMultiple(Virus virus) {
-		System.out.println("RUNNING MULTIPLE");
-		virus.setSize(Multiple.size);
-		virus.setInfectionRadius(Multiple.infectionRadius);
-		virus.setVirusType(Multiple.virusType);
-		virus.setVirusColor(Multiple.virusColor);
-		return virus;
 	}
 }

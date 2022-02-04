@@ -5,6 +5,10 @@ import CovidSim.model.Person;
 import CovidSim.model.Simulation;
 import Virus.Covid;
 import Virus.Flu;
+import Virus.Multiple;
+import Virus.Recovered;
+import Virus.Susceptible;
+import Virus.Virus;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -265,9 +269,9 @@ public class CovidSimController{
 		setCovidRecovery();
 		setSocialDistanceFactor();
 		setPopulationSize();
+		resetCount();
 		sim =  new Simulation(world, popSize);
 		sim.draw();
-		
 	}
 	
 	@FXML 
@@ -296,6 +300,15 @@ public class CovidSimController{
 		startButton.setDisable(start);
 		stopButton.setDisable(stop);
 		stepButton.setDisable(step);
+	}
+	
+	public void resetCount() {
+		Person.totalPop = 0;
+		Susceptible.totalSusCount = 0;
+		Covid.totalCovidCount = 0;
+		Flu.totalFluCount = 0;
+		Multiple.totalMultipleCount = 0;
+		Recovered.totalRecoveredCount = 0;
 	}
 	
 		

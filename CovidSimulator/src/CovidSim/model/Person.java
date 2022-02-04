@@ -3,6 +3,7 @@ package CovidSim.model;
 import Virus.Covid;
 import Virus.Flu;
 import Virus.Multiple;
+import Virus.Recovered;
 import Virus.Susceptible;
 import Virus.Virus;
 import javafx.scene.layout.Pane;
@@ -21,6 +22,7 @@ public class Person {
 	private String virusType = "covid";
 	public static int virusInfectionRadius = 10;
 	private Color virusColor = Color.PURPLE;
+	public static int totalPop;
 	
 //	private State state;
 	private Heading heading;
@@ -36,7 +38,7 @@ public class Person {
 		
 		//Initialize Person Object
 		this.virus = virus;
-		setupVirus();
+		updateVirus(virus);
 		this.virusType = virusType;
 		this.world = world;
 		this.heading =  new Heading();
@@ -56,6 +58,7 @@ public class Person {
 		//Add Person Objects into world
 		world.getChildren().add(cPerson);
 		world.getChildren().add(cZone);
+		totalPop++;
 	}
 		
 		
@@ -65,7 +68,13 @@ public class Person {
 		
 		//Draw Person [Circle]
 		public void draw() {
-			setupVirus();
+			updateVirus(virus);
+			System.out.println("Total Ppl: " + Person.totalPop);
+			System.out.println("Total Covid: " + Covid.totalCovidCount);
+			System.out.println("Total Flu: " + Flu.totalFluCount);
+			System.out.println("Total Multiple: " + Multiple.totalMultipleCount);
+			System.out.println("Total Sus:" + Susceptible.totalSusCount);
+			System.out.println("Total Recovered: " + Recovered.totalRecoveredCount);
 			
 			//Person Size
 			cPerson.setRadius(virusSize);
@@ -90,78 +99,74 @@ public class Person {
 		
 		//Check if Person is within the infection zone and update state
 		public void spread(Person other) {
-			setupVirus();
+//			setupVirus();
+			updateVirus(virus);
 			///INFECTED_COVID and SUCEPTIBLE 
 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
 				if (other.virusType.equals("covid") && virusType.equals("sus")) {
-					virusType = "covid";
+//					virusType = "covid";
+					virus = virus.transformVirus(new Covid());
+					Susceptible.totalSusCount--;
+					Covid.totalCovidCount++;
+					updateVirus(virus);
+//					System.out.println(virus.getVirusType());
 					}
 				}
 			
 			///INFECTED_FLU and SUCEPTIBLE 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
 				if (other.virusType.equals("flu") && virusType.equals("sus")) {
-					virusType = "flu";
+//					virusType = "flu";
+					virus = virus.transformVirus(new Flu());
+					updateVirus(virus);
+					Susceptible.totalSusCount--;
+					Flu.totalFluCount++;
+//					System.out.println(virus.getVirusType());
 					}
 				}
 //			
 			///INFECTED_FLU and INFECTED_COVID 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
 				if (other.virusType.equals("flu") && virusType.equals("covid")) {
-					virusType = "multiple";
+//					virusType = "multiple";
+					virus = virus.transformVirus(new Multiple());
+					updateVirus(virus);
+					Covid.totalCovidCount--;
+					Flu.totalFluCount--;
+					Multiple.totalMultipleCount += 2;
+//					System.out.println(virus.getVirusType());
 					}
 				}
 			}	
 		
+		//Update here
 		public void checkRecovery(Pane world, Person p) {
-			setupVirus();
+			updateVirus(virus);
 			if(virusType.equals("covid") || virusType.equals("flu")  || virusType.equals("multiple")) {
 				infectedTime++;
-				if(infectedTime > recoveryDuration) {
-					virusType = "recovered";
+				
+				//Recover and Update Count
+				if(infectedTime > recoveryDuration && virusType.equals("covid")) {
+					virus = virus.transformVirus(new Recovered());
+					Recovered.totalRecoveredCount++;
+					Covid.totalCovidCount--;
+				}
+				
+				if(infectedTime > recoveryDuration && virusType.equals("flu")) {
+					virus = virus.transformVirus(new Recovered());
+					Recovered.totalRecoveredCount++;
+					Flu.totalFluCount--;
+				}
+				
+				if(infectedTime > recoveryDuration && virusType.equals("multiple")) {
+					virus = virus.transformVirus(new Recovered());
+					Recovered.totalRecoveredCount++;
+					Multiple.totalMultipleCount--;
 				}
 			}
 	}
 		
-		public void setupVirus() {
-			switch(virusType) {
-			case "covid":
-				virusSize = Covid.size;
-				virusInfectionRadius = Covid.infectionRadius;
-				virusType =  Covid.virusType;
-				virusColor = Covid.virusColor;
-				recoveryDuration = Covid.recoveryDuration;
-				break;
-			case "flu":
-				virusSize = Flu.size;
-				virusInfectionRadius = Flu.infectionRadius;
-				virusType = Flu.virusType;
-				virusColor = Flu.virusColor;
-				recoveryDuration = Flu.recoveryDuration;
-				break;
-			case "multiple":
-				virusSize = Multiple.size;
-				virusInfectionRadius = Multiple.infectionRadius;
-				virusType = Multiple.virusType;
-				virusColor = Multiple.virusColor;
-				recoveryDuration = Multiple.recoveryDuration;
-				break;
-			case "sus":
-				virusSize = Susceptible.size;
-				virusInfectionRadius = Susceptible.infectionRadius;
-				virusType = Susceptible.virusType;
-				virusColor = Susceptible.virusColor;
-				break;
-			case "recovered":
-				virusSize = Susceptible.size;
-				virusType = "recovered";
-				virusColor = Color.GREEN;
-				break;
-			default:
-				
-			}
-		}
 		
 		public void updateVirus(Virus virus) {
 				virusSize = virus.getSize();

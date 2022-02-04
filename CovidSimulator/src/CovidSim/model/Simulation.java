@@ -6,10 +6,10 @@ import java.util.HashMap;
 import Virus.Covid;
 import Virus.Flu;
 import Virus.Susceptible;
+import Virus.Virus;
 import javafx.scene.layout.Pane;
 
 public class Simulation {
-	
 	
 	
 	
@@ -31,10 +31,16 @@ public class Simulation {
 		for(int i=0; i<popSize; i++) {
 			//Randomly Select a portion to be infected
 			population.put(new Person(world, "sus", new Susceptible()), i);
+			Virus.totalVirusCount++;
+			Susceptible.totalSusCount++;
 		}
 		
 		population.put(new Person(world, "covid", new Covid()), popSize++);
+		Virus.totalVirusCount++;
+		Covid.totalCovidCount++;
 		population.put(new Person(world, "flu", new Flu()), popSize++);
+		Virus.totalVirusCount++;
+		Flu.totalFluCount++;
 	}
 
 
