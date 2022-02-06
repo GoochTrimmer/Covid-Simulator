@@ -16,6 +16,4 @@ public interface VirusInterface {
 	public Color getVirusColor();
 	public void setVirusColor(Color c);
 	
-	//Spreading
-	public Virus transformVirus(Virus virus);
 }

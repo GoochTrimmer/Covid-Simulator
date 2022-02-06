@@ -12,6 +12,10 @@ public class Virus implements VirusInterface{
 	public static Color virusColor = Color.DARKBLUE;
 	public static int totalVirusCount;
 	
+	public Virus() {
+		totalVirusCount++;
+	}
+	
 	@Override
 	public int getSize() {
 		return Virus.size;
@@ -62,9 +66,5 @@ public class Virus implements VirusInterface{
 		Virus.virusColor = c;
 	}
 
-	@Override
-	public Virus transformVirus(Virus virus) {
-		return virus;
-	}
 		
 }

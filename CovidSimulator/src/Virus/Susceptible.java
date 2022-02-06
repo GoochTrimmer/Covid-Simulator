@@ -11,6 +11,10 @@ public class Susceptible extends Virus implements VirusInterface{
 	public static Color virusColor = Color.LIGHTBLUE;
 	public static int totalSusCount;
 	
+	public Susceptible() {
+		totalSusCount++;
+	}
+	
 	@Override
 	public int getSize() {
 		return Susceptible.size;

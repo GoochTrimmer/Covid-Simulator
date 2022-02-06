@@ -10,6 +10,10 @@ public class Multiple extends Virus implements VirusInterface{
 	public static Color virusColor = Color.ORANGE;
 	public static int totalMultipleCount;
 	
+	public Multiple() {
+		totalMultipleCount++;
+	}
+	
 	@Override
 	public int getSize() {
 		return Multiple.size;

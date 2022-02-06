@@ -1,5 +1,9 @@
 package CovidSim.gui;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import CovidSim.model.Heading;
 import CovidSim.model.Person;
 import CovidSim.model.Simulation;
@@ -8,11 +12,19 @@ import Virus.Flu;
 import Virus.Multiple;
 import Virus.Recovered;
 import Virus.Susceptible;
-import Virus.Virus;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -67,14 +79,41 @@ public class CovidSimController{
 	@FXML
 	TextField tickField;
 	
+	//Charts 
+	@FXML
+	LineChart<Number, Number> popLineChart;
+	
+	@FXML
+	CategoryAxis x;
+	
+	@FXML
+	NumberAxis y;
+	
+	@FXML 
+	PieChart popPieChart;
+	
 	int popSize = 500;
-	
-	public int getTest() {
-		return (int) covidSizeSlider.getValue();
-	}
-	
-	
+	ScheduledExecutorService scheduledExecutorService;	
 	Simulation sim;
+	
+	//Line Chart - Series Data 
+	XYChart.Series<Number, Number> seriesSus = new XYChart.Series<>();
+	XYChart.Series<Number, Number> seriesRecovered = new XYChart.Series<>();
+	XYChart.Series<Number, Number> seriesCovid = new XYChart.Series<>();
+	XYChart.Series<Number, Number> seriesFlu = new XYChart.Series<>();
+	XYChart.Series<Number, Number> seriesMultiple = new XYChart.Series<>();    
+    
+	//Pie Chart
+	public ObservableList<PieChart.Data> pieChartData =
+            FXCollections.observableArrayList(
+            new PieChart.Data("Susceptible", Susceptible.totalSusCount),
+            new PieChart.Data("Covid", Covid.totalCovidCount),
+            new PieChart.Data("Flu", Flu.totalFluCount),
+            new PieChart.Data("Multiple", Multiple.totalMultipleCount),
+            new PieChart.Data("Reovered", Recovered.totalRecoveredCount));
+
+	
+
 	
 	private Movement clock; //=  new Movement();
 	
@@ -107,7 +146,9 @@ public class CovidSimController{
 			ticks++;
 		}
 	}
+
 	
+	@SuppressWarnings("unchecked")
 	@FXML
 	public void initialize() {
 		
@@ -128,10 +169,34 @@ public class CovidSimController{
 		sim.draw();
 		tickField.setText("" + 0);
 		
+		//Initialize Pie Chart
+		updatePopPieChart();
+		popPieChart.setData(pieChartData);
+		popPieChart.setLegendVisible(false);
 		
+		//Update Line Chart Data
+		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+	    scheduledExecutorService.scheduleAtFixedRate(() -> {
+	    	
+	    seriesSus.setName("Susceptible");	
+	    seriesRecovered.setName("Recovered");
+	    seriesCovid.setName("Covid");
+	    seriesFlu.setName("Flu");
+	    seriesMultiple.setName("Multiple");
+	    
+	         //Update Series Data in new Thread
+	         Platform.runLater(() -> {
+	             seriesSus.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Susceptible.totalSusCount));
+	             seriesRecovered.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Recovered.totalRecoveredCount));
+	             seriesCovid.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Covid.totalCovidCount));
+	             seriesFlu.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Flu.totalFluCount));
+	             seriesMultiple.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Multiple.totalMultipleCount));
+	         });
+	     }, 0, 1, TimeUnit.SECONDS);
+		
+	    popLineChart.getData().addAll(seriesSus, seriesRecovered, seriesCovid, seriesFlu, seriesMultiple);
+
 		//Read and Update values from Sliders
-		
-		//Common Parameters
 		populationSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -218,6 +283,34 @@ public class CovidSimController{
 		world.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
 	}
 	
+	//Update Charts
+	public void updatePopPieChart() {
+		addData("Susceptible", Susceptible.totalSusCount);
+		addData("Covid", Covid.totalCovidCount);
+		addData("Flu", Flu.totalFluCount);
+		addData("Multiple", Multiple.totalMultipleCount);
+		addData("Recovered", Recovered.totalRecoveredCount);
+	}
+	
+	public void addData(String name, double value)
+	{
+	    for(Data d : pieChartData)
+	    {
+	        if(d.getName().equals(name))
+	        {
+	            d.setPieValue(value);
+	            return;
+	        }
+	    }
+	    naiveAddData(name, value);
+	}
+	
+	public void naiveAddData(String name, double value)
+	{
+	    pieChartData.add(new Data(name, value));
+	}
+	
+	
 	//Slider parameter functions
 	public void setCovidSize() {
 		Covid.size = (int) covidSizeSlider.getValue();
@@ -244,11 +337,11 @@ public class CovidSimController{
 	}
 	
 	public void setCovidInfectionRadius() {
-		Covid.infectionRadius = (int) covidRadiusSlider.getValue() + Person.virusSize;
+		Covid.infectionRadius = (int) covidRadiusSlider.getValue() + Person.radius;
 	}
 	
 	public void setFluInfectionRadius() {
-		Flu.infectionRadius = (int) fluRadiusSlider.getValue() + Person.virusSize;
+		Flu.infectionRadius = (int) fluRadiusSlider.getValue() + Person.radius;
 	}
 	
 	
@@ -263,6 +356,7 @@ public class CovidSimController{
 		clock.resetTicks();
 		tickField.setText("" + clock.getTicks());
 		world.getChildren().clear();
+		clearSeries();
 		setCovidSize();
 		setFluSize();
 		setSpeed();
@@ -272,6 +366,7 @@ public class CovidSimController{
 		resetCount();
 		sim =  new Simulation(world, popSize);
 		sim.draw();
+		updatePopPieChart();
 	}
 	
 	@FXML 
@@ -294,6 +389,10 @@ public class CovidSimController{
 		sim.draw();
 		clock.tick();
 		tickField.setText("" + clock.getTicks());
+		
+		//Update Pie Chart
+		updatePopPieChart();
+		
 	}
 	
 	public void disableButtons(boolean start, boolean stop, boolean step) {
@@ -311,5 +410,12 @@ public class CovidSimController{
 		Recovered.totalRecoveredCount = 0;
 	}
 	
+	public void clearSeries() {
+		seriesSus.getData().clear();
+		seriesRecovered.getData().clear();
+		seriesCovid.getData().clear();
+		seriesFlu.getData().clear();
+		seriesMultiple.getData().clear();
+	}
 		
 }

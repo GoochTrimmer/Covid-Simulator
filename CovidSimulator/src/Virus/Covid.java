@@ -10,6 +10,10 @@ public class Covid extends Virus implements VirusInterface{
 	public static Color virusColor = Color.RED;
 	public static int totalCovidCount;
 	
+	public Covid() {
+		totalCovidCount++;
+	}
+	
 	@Override
 	public int getSize() {
 		return Covid.size;

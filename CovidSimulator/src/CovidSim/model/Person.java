@@ -14,14 +14,9 @@ public class Person {
 	
 	//Person Class unique parameters
 	public static double speed = 1;
-	
 	public static int socialDistanceFactor = 10;
-	
-	public static int virusSize = 5;
-	public static int recoveryDuration;
-	private String virusType = "covid";
-	public static int virusInfectionRadius = 10;
-	private Color virusColor = Color.PURPLE;
+	public static int radius = Susceptible.size;
+
 	public static int totalPop;
 	
 //	private State state;
@@ -38,14 +33,12 @@ public class Person {
 		
 		//Initialize Person Object
 		this.virus = virus;
-		updateVirus(virus);
-		this.virusType = virusType;
 		this.world = world;
 		this.heading =  new Heading();
 		this.pos = new Position(world);
 		this.origin = new Position(pos.getX(), pos.getY());
-		this.cPerson = new Circle(virusSize, virusColor);
-		this.cZone =  new Circle(virusInfectionRadius);
+		this.cPerson = new Circle(virus.getSize(), virus.getVirusColor());
+		this.cZone =  new Circle(virus.getInfectionRadius());
 		cPerson.setStroke(Color.BLACK);
 		cZone.setFill(new Color(0,0,0,0));
 		
@@ -68,7 +61,6 @@ public class Person {
 		
 		//Draw Person [Circle]
 		public void draw() {
-			updateVirus(virus);
 			System.out.println("Total Ppl: " + Person.totalPop);
 			System.out.println("Total Covid: " + Covid.totalCovidCount);
 			System.out.println("Total Flu: " + Flu.totalFluCount);
@@ -77,20 +69,20 @@ public class Person {
 			System.out.println("Total Recovered: " + Recovered.totalRecoveredCount);
 			
 			//Person Size
-			cPerson.setRadius(virusSize);
-			cPerson.setFill(virusColor);
+			cPerson.setRadius(virus.getSize());
+			cPerson.setFill(virus.getVirusColor());
 			cPerson.setTranslateX(pos.getX());
 			cPerson.setTranslateY(pos.getY());
 			
 			//Person Infection Radius
-			cZone.setRadius(virusInfectionRadius);
+			cZone.setRadius(virus.getInfectionRadius());
 			cZone.setTranslateX(pos.getX());
 			cZone.setTranslateY(pos.getY());
 			cZone.setStroke(Color.PURPLE);
 			cZone.setFill(new Color(0,0,0,0));
 			
 			//Only show Infection Radius if Person is infected
-			if(virusType.equals("covid") || virusType.equals("flu") || virusType.equals("multiple"))
+			if(virus.getVirusType().equals("covid") || virus.getVirusType().equals("flu") || virus.getVirusType().equals("multiple"))
 				cZone.setVisible(true);
 			else
 				cZone.setVisible(false);
@@ -99,81 +91,55 @@ public class Person {
 		
 		//Check if Person is within the infection zone and update state
 		public void spread(Person other) {
-//			setupVirus();
-			updateVirus(virus);
+			
 			///INFECTED_COVID and SUCEPTIBLE 
-
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
-				if (other.virusType.equals("covid") && virusType.equals("sus")) {
-//					virusType = "covid";
-					virus = virus.transformVirus(new Covid());
+				if (other.virus.getVirusType().equals("covid") && virus.getVirusType().equals("sus")) {
+					virus = new Covid();
 					Susceptible.totalSusCount--;
-					Covid.totalCovidCount++;
-					updateVirus(virus);
-//					System.out.println(virus.getVirusType());
 					}
 				}
 			
 			///INFECTED_FLU and SUCEPTIBLE 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
-				if (other.virusType.equals("flu") && virusType.equals("sus")) {
-//					virusType = "flu";
-					virus = virus.transformVirus(new Flu());
-					updateVirus(virus);
+				if (other.virus.getVirusType().equals("flu") && virus.getVirusType().equals("sus")) {
+					virus = new Flu();
 					Susceptible.totalSusCount--;
-					Flu.totalFluCount++;
-//					System.out.println(virus.getVirusType());
 					}
 				}
 //			
 			///INFECTED_FLU and INFECTED_COVID 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
-				if (other.virusType.equals("flu") && virusType.equals("covid")) {
-//					virusType = "multiple";
-					virus = virus.transformVirus(new Multiple());
-					updateVirus(virus);
+				if (other.virus.getVirusType().equals("flu") && virus.getVirusType().equals("covid")) {
+					virus = new Multiple();
+					other.virus = new Multiple();
 					Covid.totalCovidCount--;
 					Flu.totalFluCount--;
-					Multiple.totalMultipleCount += 2;
-//					System.out.println(virus.getVirusType());
 					}
 				}
 			}	
 		
 		//Update here
 		public void checkRecovery(Pane world, Person p) {
-			updateVirus(virus);
-			if(virusType.equals("covid") || virusType.equals("flu")  || virusType.equals("multiple")) {
+			if(virus.getVirusType().equals("covid") || virus.getVirusType().equals("flu")  || virus.getVirusType().equals("multiple")) {
 				infectedTime++;
 				
 				//Recover and Update Count
-				if(infectedTime > recoveryDuration && virusType.equals("covid")) {
-					virus = virus.transformVirus(new Recovered());
-					Recovered.totalRecoveredCount++;
+				if(infectedTime > virus.getRecoveryDuration() && virus.getVirusType().equals("covid")) {
+					virus = new Recovered();
 					Covid.totalCovidCount--;
 				}
 				
-				if(infectedTime > recoveryDuration && virusType.equals("flu")) {
-					virus = virus.transformVirus(new Recovered());
-					Recovered.totalRecoveredCount++;
+				if(infectedTime > virus.getRecoveryDuration() && virus.getVirusType().equals("flu")) {
+					virus = new Recovered();
 					Flu.totalFluCount--;
 				}
 				
-				if(infectedTime > recoveryDuration && virusType.equals("multiple")) {
-					virus = virus.transformVirus(new Recovered());
-					Recovered.totalRecoveredCount++;
+				if(infectedTime > virus.getRecoveryDuration() && virus.getVirusType().equals("multiple")) {
+					virus = new Recovered();
 					Multiple.totalMultipleCount--;
 				}
 			}
-	}
-		
-		
-		public void updateVirus(Virus virus) {
-				virusSize = virus.getSize();
-				virusInfectionRadius = virus.getInfectionRadius();
-				virusType =  virus.getVirusType();
-				virusColor = virus.getVirusColor();
-				recoveryDuration = virus.getRecoveryDuration();
-			}
-		}
+		}		
+	}	
 

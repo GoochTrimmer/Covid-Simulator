@@ -24,8 +24,8 @@ public class Position {
 	//Add min radius so dosen't spawn on left side edge | 2*radius so it dosen't spawn on the right side edge
 	
 	public Position(Pane world) {
-		this(Person.virusSize + Math.random() * (world.getWidth() - 2 * Person.virusSize),
-				Person.virusSize + Math.random() * (world.getHeight() - 2 * Person.virusSize));
+		this(Person.radius + Math.random() * (world.getWidth() - 2 * Person.radius),
+				Person.radius + Math.random() * (world.getHeight() - 2 * Person.radius));
 	}
 	
 	//Euclidean Distance formula to get distance between two Points
@@ -42,13 +42,13 @@ public class Position {
 		y += heading.getDy();
 		
 		//Check if Collided with edge of Pane and Bounce || Obey social distance factor
-		if(x < Person.virusSize || x > world.getWidth() - Person.virusSize  ||
+		if(x < Person.radius || x > world.getWidth() - Person.radius  ||
 				distance(origin) > Person.socialDistanceFactor) {
 			heading.bounceX();
 			x += heading.getDx();
 		}
 		
-		if(y < Person.virusSize || y > world.getHeight() - Person.virusSize ||
+		if(y < Person.radius || y > world.getHeight() - Person.radius ||
 				distance(origin) > Person.socialDistanceFactor) {
 			heading.bounceY();
 			y += heading.getDy();

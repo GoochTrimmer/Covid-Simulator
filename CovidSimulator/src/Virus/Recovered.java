@@ -10,6 +10,10 @@ public class Recovered extends Virus implements VirusInterface{
 	public static Color virusColor = Color.GREEN;
 	public static int totalRecoveredCount;
 	
+	public Recovered() {
+		totalRecoveredCount++;
+	}
+	
 	@Override
 	public int getSize() {
 		return Recovered.size;

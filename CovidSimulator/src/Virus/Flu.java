@@ -11,6 +11,10 @@ public class Flu extends Virus implements VirusInterface{
 	public static Color virusColor = Color.YELLOW;
 	public static int totalFluCount;
 	
+	public Flu() {
+		totalFluCount++;
+	}
+	
 	@Override
 	public int getSize() {
 		return Flu.size;
