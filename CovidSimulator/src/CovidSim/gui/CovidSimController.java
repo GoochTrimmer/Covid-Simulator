@@ -113,8 +113,6 @@ public class CovidSimController{
             new PieChart.Data("Reovered", Recovered.totalRecoveredCount));
 
 	
-
-	
 	private Movement clock; //=  new Movement();
 	
 	private class Movement extends AnimationTimer {
@@ -171,8 +169,12 @@ public class CovidSimController{
 		
 		//Initialize Pie Chart
 		updatePopPieChart();
-		popPieChart.setData(pieChartData);
 		popPieChart.setLegendVisible(false);
+		popPieChart.setData(pieChartData);
+		
+		//Initialize Line Chart 
+		popLineChart.setCreateSymbols(false);
+
 		
 		//Update Line Chart Data
 		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -184,15 +186,15 @@ public class CovidSimController{
 	    seriesFlu.setName("Flu");
 	    seriesMultiple.setName("Multiple");
 	    
-	         //Update Series Data in new Thread
-	         Platform.runLater(() -> {
-	             seriesSus.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Susceptible.totalSusCount));
-	             seriesRecovered.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Recovered.totalRecoveredCount));
-	             seriesCovid.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Covid.totalCovidCount));
-	             seriesFlu.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Flu.totalFluCount));
-	             seriesMultiple.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Multiple.totalMultipleCount));
-	         });
-	     }, 0, 1, TimeUnit.SECONDS);
+	     //Update Series Data in new Thread
+	    Platform.runLater(() -> {
+	    	seriesSus.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Susceptible.totalSusCount));
+	        seriesRecovered.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Recovered.totalRecoveredCount));
+	        seriesCovid.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Covid.totalCovidCount));
+	        seriesFlu.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Flu.totalFluCount));
+	        seriesMultiple.getData().add(new XYChart.Data<>(clock.getTicks() / 60, Multiple.totalMultipleCount));
+	     	});
+	    }, 0, 1, TimeUnit.SECONDS);
 		
 	    popLineChart.getData().addAll(seriesSus, seriesRecovered, seriesCovid, seriesFlu, seriesMultiple);
 
@@ -383,6 +385,12 @@ public class CovidSimController{
 	
 	@FXML
 	public void step() {
+		//Stop Simulation once there is no more infected people
+		if(Covid.totalCovidCount == 0 & Flu.totalFluCount == 0 & Multiple.totalMultipleCount == 0) {
+			clock.stop();
+			disableButtons(true, true, true);
+		}
+		
 		sim.move();
 		sim.recover(world);
 		sim.checkCollisions();
