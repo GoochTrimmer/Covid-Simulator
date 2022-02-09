@@ -1,0 +1,40 @@
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane .tab
+{
+	-fx-background-color: #651e3e;
+	-fx-focus-color: transparent;
+}
+
+.tab-pane .label
+{
+	-fx-text-fill: #ffffff;
+}
+
+.tab-pane .tab:selected
+{
+	-fx-background-color:  #851e3e;
+}
+
+#paramBox {
+	-fx-background-color:  #851e3e;
+}
+
+.slider .axis .axis-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: #ffff;
+}
+
+.slider .thumb {
+	-fx-background-color: #251e3e; 
+}
+
+.slider .track {
+	-fx-background-color: #451e3e ;
+}
+
+.slider .axis { 
+	-fx-tick-label-fill: white;
+}

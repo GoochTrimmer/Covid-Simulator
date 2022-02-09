@@ -56,6 +56,9 @@ public class CovidSimController{
 	Slider fluSizeSlider;
 	
 	@FXML
+	Slider mulSizeSlider;
+	
+	@FXML
 	Slider speedSlider;
 	
 	@FXML
@@ -65,6 +68,9 @@ public class CovidSimController{
 	Slider fluRecoverySlider;
 	
 	@FXML
+	Slider mulRecoverySlider;
+	
+	@FXML
 	Slider socialDistanceSlider;
 	
 	@FXML
@@ -72,6 +78,9 @@ public class CovidSimController{
 	
 	@FXML 
 	Slider fluRadiusSlider;
+	
+	@FXML
+	Slider mulRadiusSlider;
 	
 	@FXML
 	Slider populationSlider;
@@ -118,7 +127,7 @@ public class CovidSimController{
 	private class Movement extends AnimationTimer {
 		
 		private long FPS = 60L;
-		private long INTERVAL = 1000000L/FPS;
+		private long INTERVAL = 1000000/FPS;
 		private long last = 0;
 		private int ticks = 0;
 		
@@ -152,12 +161,17 @@ public class CovidSimController{
 		
 		//Setup Canvas and Draw
 		System.out.println("Init");
-		world.resize(935, 483);
+		world.resize(780, 485);
 		world.getChildren().clear();
 		setCovidSize();
 		setFluSize();
+		setMulSize();
+		setCovidRecovery();
+		setFluRecovery();
+		setMulRecovery();
 		setCovidInfectionRadius();
 		setFluInfectionRadius();
+		setMulInfectionRadius();
 		setSpeed();
 		setCovidRecovery();
 		setFluRecovery();
@@ -165,7 +179,8 @@ public class CovidSimController{
 		setPopulationSize();
 		sim =  new Simulation(world, popSize);
 		sim.draw();
-		tickField.setText("" + 0);
+		tickField.setEditable(false);
+		tickField.setText("0 Ticks");
 		
 		//Initialize Pie Chart
 		updatePopPieChart();
@@ -173,7 +188,7 @@ public class CovidSimController{
 		popPieChart.setData(pieChartData);
 		
 		//Initialize Line Chart 
-		popLineChart.setCreateSymbols(false);
+		popLineChart.setCreateSymbols(true);
 
 		
 		//Update Line Chart Data
@@ -226,7 +241,7 @@ public class CovidSimController{
 			
 		});
 		
-		//Virus Parameters
+		//Size
 		covidSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -245,7 +260,16 @@ public class CovidSimController{
 			
 		});
 		
+		mulSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setMulSize();
+				sim.draw();
+			}
+			
+		});
 		
+		//Recovery Duration
 		covidRecoverySlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -262,6 +286,15 @@ public class CovidSimController{
 			
 		});
 		
+		mulRecoverySlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setMulRecovery();
+			}
+			
+		});
+		
+		//Infection Radius
 		covidRadiusSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -275,6 +308,15 @@ public class CovidSimController{
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				setFluInfectionRadius();
+				sim.draw();
+			}
+			
+		});
+		
+		mulRadiusSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				setMulInfectionRadius();
 				sim.draw();
 			}
 			
@@ -322,12 +364,20 @@ public class CovidSimController{
 		Flu.size = (int) fluSizeSlider.getValue();
 	}
 	
+	public void setMulSize() {
+		Multiple.size = (int) mulSizeSlider.getValue();
+	}
+	
 	public void setCovidRecovery() {
 		Covid.recoveryDuration = 60 * (int) covidRecoverySlider.getValue();
 	}
 	
 	public void setFluRecovery() {
 		Flu.recoveryDuration = 60 * (int) fluRecoverySlider.getValue();
+	}
+	
+	public void setMulRecovery() {
+		Multiple.recoveryDuration = 60 * (int) mulRecoverySlider.getValue();
 	}
 	
 	public void setSpeed() {
@@ -346,6 +396,10 @@ public class CovidSimController{
 		Flu.infectionRadius = (int) fluRadiusSlider.getValue() + Person.radius;
 	}
 	
+	public void setMulInfectionRadius() {
+		Multiple.infectionRadius = (int) mulRadiusSlider.getValue() + Person.radius;
+	}
+	
 	
 	public void setPopulationSize() {
 		popSize = (int) populationSlider.getValue();
@@ -356,13 +410,20 @@ public class CovidSimController{
 	public void reset() {
 		stop();
 		clock.resetTicks();
+		tickField.setText("0 Ticks");
 		tickField.setText("" + clock.getTicks());
 		world.getChildren().clear();
 		clearSeries();
 		setCovidSize();
 		setFluSize();
-		setSpeed();
+		setMulSize();
 		setCovidRecovery();
+		setFluRecovery();
+		setMulRecovery();
+		setCovidInfectionRadius();
+		setFluInfectionRadius();
+		setMulInfectionRadius();
+		setSpeed();
 		setSocialDistanceFactor();
 		setPopulationSize();
 		resetCount();
@@ -396,8 +457,7 @@ public class CovidSimController{
 		sim.checkCollisions();
 		sim.draw();
 		clock.tick();
-		tickField.setText("" + clock.getTicks());
-		
+		tickField.setText(clock.getTicks() + " Ticks");		
 		//Update Pie Chart
 		updatePopPieChart();
 		

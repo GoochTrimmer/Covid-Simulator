@@ -14,11 +14,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="945.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CovidSim.gui.CovidSimController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="945.0" style="-fx-background-color: #051e3e;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CovidSim.gui.CovidSimController">
    <top>
-      <Label prefWidth="172.0" text="Covid Simulator" textAlignment="CENTER" textFill="#220ed0" BorderPane.alignment="CENTER">
+      <Label alignment="CENTER" prefWidth="172.0" text="Virus Royale" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
          <font>
             <Font name="Lucida Sans Typewriter Regular" size="19.0" />
          </font>
@@ -28,7 +29,7 @@
       </Label>
    </top>
    <center>
-      <Pane fx:id="world" prefHeight="626.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+      <Pane fx:id="world" prefHeight="503.0" prefWidth="695.0" style="-fx-background-color: #251e3e;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin></Pane>
@@ -39,93 +40,52 @@
             <Insets />
          </BorderPane.margin>
          <top>
-            <HBox alignment="CENTER" prefHeight="36.0" prefWidth="945.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="36.0" prefWidth="945.0" stylesheets="@buttons.css" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#reset" text="Reset" textAlignment="CENTER">
                      <font>
                         <Font name="Lucida Sans Typewriter Bold Oblique" size="13.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
                   </Button>
                   <Button fx:id="startButton" mnemonicParsing="false" onAction="#start" text="Start" textAlignment="CENTER">
                      <font>
                         <Font name="Lucida Sans Typewriter Bold Oblique" size="13.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
                   </Button>
                   <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stop" text="Stop" textAlignment="CENTER">
                      <font>
                         <Font name="Lucida Sans Typewriter Bold Oblique" size="13.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
                   </Button>
                   <Button fx:id="stepButton" mnemonicParsing="false" onAction="#step" text="Step" textAlignment="CENTER">
                      <font>
                         <Font name="Lucida Sans Typewriter Bold Oblique" size="13.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
                   </Button>
-                  <TextField fx:id="tickField" />
+                  <TextField fx:id="tickField">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin></TextField>
                </children>
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
             </HBox>
          </top>
-         <left>
-            <HBox prefHeight="198.0" prefWidth="283.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TabPane prefHeight="284.0" prefWidth="339.0" tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                        <Tab text="Common Parameters">
-                           <content>
-                              <VBox fillWidth="false" prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="Population Size" />
-                                    <Slider fx:id="populationSlider" blockIncrement="100.0" max="1000.0" min="100.0" minHeight="-Infinity" prefHeight="38.0" prefWidth="340.0" showTickLabels="true" showTickMarks="true" />
-                                    <Label text="Social Distance Factor" />
-                                    <Slider fx:id="socialDistanceSlider" max="200.0" min="10.0" prefHeight="28.0" prefWidth="343.0" showTickLabels="true" showTickMarks="true" />
-                                    <Label text="Speed" />
-                                    <Slider fx:id="speedSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="2" prefHeight="38.0" prefWidth="342.0" showTickLabels="true" showTickMarks="true" value="2.0" />
-                                 </children>
-                              </VBox>
-                           </content>
-                        </Tab>
-                      <Tab text="Covid Virus">
-                           <content>
-                              <VBox prefHeight="306.0" prefWidth="222.0">
-                                 <children>
-                                    <Label text="Size" />
-                                    <Slider fx:id="covidSizeSlider" majorTickUnit="2.0" max="10.0" min="4.0" prefWidth="222.0" showTickLabels="true" showTickMarks="true" value="4.0">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </Slider>
-                                    <Label text="Recovery Rate" />
-                                    <Slider fx:id="covidRecoverySlider" blockIncrement="2.0" majorTickUnit="2.0" max="8.0" min="2.0" showTickLabels="true" showTickMarks="true" value="2.0" />
-                                    <Label text="Infection Radius" />
-                                    <Slider fx:id="covidRadiusSlider" majorTickUnit="2.0" max="10.0" min="4.0" prefWidth="222.0" showTickLabels="true" showTickMarks="true" value="4.0" />
-                                 </children>
-                              </VBox>
-                           </content>
-                        </Tab>
-                      <Tab text="Flu Virus">
-                           <content>
-                              <VBox prefHeight="171.0" prefWidth="517.0">
-                                 <children>
-                                    <Label text="Size" />
-                                    <Slider fx:id="fluSizeSlider" majorTickUnit="2.0" max="10.0" min="4.0" showTickLabels="true" showTickMarks="true" />
-                                    <Label text="Recovery Rate" />
-                                    <Slider fx:id="fluRecoverySlider" majorTickUnit="2.0" max="8.0" min="2.0" showTickLabels="true" showTickMarks="true" />
-                                    <Label text="Infection Radius" />
-                                    <Slider fx:id="fluRadiusSlider" majorTickUnit="2.0" max="10.0" min="4.0" minorTickCount="2" showTickLabels="true" showTickMarks="true" />
-                                 </children>
-                              </VBox>
-                           </content>
-                        </Tab>
-                    </tabs>
-                  </TabPane>
-               </children>
-            </HBox>
-         </left>
          <center>
-            <LineChart fx:id="popLineChart" legendSide="RIGHT" prefHeight="198.0" prefWidth="347.0" title="Population Over Time" BorderPane.alignment="CENTER">
+            <LineChart fx:id="popLineChart" legendSide="RIGHT" prefHeight="198.0" prefWidth="347.0" stylesheets="@charts.css" title="Population Over Time" BorderPane.alignment="CENTER">
               <xAxis>
                 <NumberAxis animated="false" label="Time" side="BOTTOM" />
               </xAxis>
@@ -138,8 +98,289 @@
             </LineChart>
          </center>
          <right>
-            <PieChart fx:id="popPieChart" prefHeight="198.0" prefWidth="276.0" title="Population Overview" BorderPane.alignment="CENTER" />
+            <PieChart fx:id="popPieChart" prefHeight="240.0" prefWidth="307.0" stylesheets="@charts.css" title="Population Overview" BorderPane.alignment="CENTER" />
          </right>
       </BorderPane>
    </bottom>
+   <left>
+      <VBox fillWidth="false" prefHeight="512.0" prefWidth="240.0" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane minWidth="-Infinity" prefHeight="488.0" prefWidth="236.0" side="LEFT" stylesheets="@tabs.css" tabClosingPolicy="UNAVAILABLE" tabMinHeight="55.0" tabMinWidth="70.0">
+              <tabs>
+                  <Tab>
+                     <content>
+                        <VBox id="paramBox" alignment="TOP_CENTER" fillWidth="false" prefHeight="480.0" prefWidth="174.0" stylesheets="@tabs.css">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" text="Simulation Parameters" textAlignment="CENTER" underline="true">
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Population Size">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="populationSlider" blockIncrement="100.0" max="1000.0" min="100.0" minHeight="-Infinity" prefHeight="38.0" prefWidth="340.0" showTickLabels="true" showTickMarks="true">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Social Distance Factor">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="socialDistanceSlider" majorTickUnit="10.0" max="200.0" min="10.0" prefHeight="28.0" prefWidth="343.0" showTickLabels="true" showTickMarks="true" value="100.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Speed">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="speedSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="2" prefHeight="38.0" prefWidth="342.0" showTickLabels="true" showTickMarks="true" value="1.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                           </children>
+                        </VBox>
+                     </content>
+                     <graphic>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="0.0" prefWidth="60.0">
+                           <children>
+                              <Circle fill="#a5cedb" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="Sim">
+                                 <font>
+                                    <Font name="System Bold Italic" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </Tab>
+                <Tab>
+                     <content>
+                        <VBox id="paramBox" alignment="TOP_CENTER" prefHeight="306.0" prefWidth="222.0" stylesheets="@tabs.css">
+                           <children>
+                              <Label text="Covid Parameters" underline="true">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Size">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="covidSizeSlider" majorTickUnit="2.0" max="10.0" min="4.0" prefWidth="222.0" showTickLabels="true" showTickMarks="true" value="6.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Recovery Rate">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="covidRecoverySlider" blockIncrement="2.0" majorTickUnit="2.0" max="8.0" min="2.0" showTickLabels="true" showTickMarks="true" value="6.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Infection Radius">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="covidRadiusSlider" majorTickUnit="2.0" max="10.0" min="4.0" prefWidth="222.0" showTickLabels="true" showTickMarks="true" value="8.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                           </children>
+                        </VBox>
+                     </content>
+                     <graphic>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="0.0" prefWidth="37.0">
+                           <children>
+                              <Circle fill="RED" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="Covid">
+                                 <font>
+                                    <Font name="System Bold Italic" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </Tab>
+                <Tab>
+                     <content>
+                        <VBox id="paramBox" alignment="TOP_CENTER" prefHeight="171.0" prefWidth="517.0" stylesheets="@tabs.css">
+                           <children>
+                              <Label text="Flu Parameters" underline="true">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Size">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="fluSizeSlider" majorTickUnit="2.0" max="10.0" min="4.0" showTickLabels="true" showTickMarks="true" value="6.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Recovery Rate">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="fluRecoverySlider" blockIncrement="2.0" majorTickUnit="2.0" max="8.0" min="2.0" showTickLabels="true" showTickMarks="true" value="4.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Infection Radius">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="fluRadiusSlider" majorTickUnit="2.0" max="10.0" min="4.0" showTickLabels="true" showTickMarks="true" value="6.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                           </children>
+                        </VBox>
+                     </content>
+                     <graphic>
+                        <VBox prefHeight="0.0" prefWidth="0.0">
+                           <children>
+                              <Circle fill="YELLOW" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="Flu">
+                                 <font>
+                                    <Font name="System Bold Italic" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </Tab>
+                  <Tab>
+                     <graphic>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="0.0" prefWidth="75.0">
+                           <children>
+                              <Circle fill="ORANGE" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label text="Multiple">
+                                 <font>
+                                    <Font name="System Bold Italic" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </graphic>
+                     <content>
+                        <VBox id="paramBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" stylesheets="@tabs.css">
+                           <children>
+                              <Label text="Multiple Parameters" underline="true">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label text="Size">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="mulSizeSlider" majorTickUnit="2.0" max="10.0" min="4.0" showTickLabels="true" showTickMarks="true" value="6.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Recovery Rate">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="mulRecoverySlider" blockIncrement="2.0" majorTickUnit="2.0" max="8.0" min="2.0" showTickLabels="true" showTickMarks="true" value="8.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label text="Infection Radius">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="mulRadiusSlider" majorTickUnit="2.0" max="10.0" min="4.0" showTickLabels="true" showTickMarks="true" value="10.0">
+                                 <VBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+              </tabs>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TabPane>
+         </children>
+      </VBox>
+   </left>
 </BorderPane>

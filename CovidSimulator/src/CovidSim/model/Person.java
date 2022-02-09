@@ -57,16 +57,16 @@ public class Person {
 		
 		public void move() {
 			pos.move(heading, world, speed, origin);
-		}
+			}
 		
 		//Draw Person [Circle]
 		public void draw() {
-			System.out.println("Total Ppl: " + Person.totalPop);
-			System.out.println("Total Covid: " + Covid.totalCovidCount);
-			System.out.println("Total Flu: " + Flu.totalFluCount);
-			System.out.println("Total Multiple: " + Multiple.totalMultipleCount);
-			System.out.println("Total Sus:" + Susceptible.totalSusCount);
-			System.out.println("Total Recovered: " + Recovered.totalRecoveredCount);
+//			System.out.println("Total Ppl: " + Person.totalPop);
+//			System.out.println("Total Covid: " + Covid.totalCovidCount);
+//			System.out.println("Total Flu: " + Flu.totalFluCount);
+//			System.out.println("Total Multiple: " + Multiple.totalMultipleCount);
+//			System.out.println("Total Sus:" + Susceptible.totalSusCount);
+//			System.out.println("Total Recovered: " + Recovered.totalRecoveredCount);
 			
 			//Person Size
 			cPerson.setRadius(virus.getSize());
@@ -78,7 +78,7 @@ public class Person {
 			cZone.setRadius(virus.getInfectionRadius());
 			cZone.setTranslateX(pos.getX());
 			cZone.setTranslateY(pos.getY());
-			cZone.setStroke(Color.PURPLE);
+			cZone.setStroke(Color.WHITESMOKE);
 			cZone.setFill(new Color(0,0,0,0));
 			
 			//Only show Infection Radius if Person is infected
@@ -107,7 +107,7 @@ public class Person {
 					Susceptible.totalSusCount--;
 					}
 				}
-//			
+			
 			///INFECTED_FLU and INFECTED_COVID 
 			if(cPerson.getBoundsInParent().intersects(other.cZone.getBoundsInParent())) {
 				if (other.virus.getVirusType().equals("flu") && virus.getVirusType().equals("covid")) {

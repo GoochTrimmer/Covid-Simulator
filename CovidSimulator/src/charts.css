@@ -1,0 +1,83 @@
+/*Set Colors to Match Virus Colors on Pie Chart */
+.default-color0.chart-pie { -fx-pie-color: #A5CEDB; }
+.default-color1.chart-pie { -fx-pie-color: #FF0000; }
+.default-color2.chart-pie { -fx-pie-color: #FFFF00; }
+.default-color3.chart-pie { -fx-pie-color: #FFA500; }
+.default-color4.chart-pie { -fx-pie-color: #008000; }
+.default-color5.chart-pie { -fx-pie-color: #008000; }
+
+/*Set Colors to Match Virus Colors on Line Chart */
+.chart-series-line {    
+    -fx-stroke-width: 4px;
+    -fx-effect: null;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #A5CEDB; }
+.default-color1.chart-series-line { -fx-stroke: #008000; }
+.default-color2.chart-series-line { -fx-stroke: #FF0000; }
+.default-color3.chart-series-line { -fx-stroke: #FFFF00; }
+.default-color4.chart-series-line { -fx-stroke: #FFA500; }
+
+.default-color0.chart-line-symbol { -fx-background-color: #A5CEDB, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #008000, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #FF0000, white; }
+.default-color3.chart-line-symbol { -fx-background-color: #FFFF00, white; }
+.default-color4.chart-line-symbol { -fx-background-color: #FFA500, white; }
+
+.chart-plot-background {
+    -fx-background-color: #251e3e;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke:  #ffff  ;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke:  #ffff ;
+}
+.chart-alternative-row-fill {
+    -fx-fill: #451e3e ;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+
+.chart-title {
+  -fx-text-fill: #ffff;
+  -fx-font-weight: bold;
+}
+
+.chart-legend {
+   -fx-background-color:  transparent;
+  -fx-padding: 0px 0px 50px 0px;
+}
+
+.axis-tick-mark {
+    -fx-stroke: #ffff;
+    -fx-stroke-width: 1; 
+}
+
+.axis {   
+    -fx-tick-label-fill: #ffff;
+}
+
+.axis-label {
+   -fx-text-fill: #ffff; 
+   -fx-font-weight: bold;
+}
+
+.axis-minor-tick-mark {
+    -fx-stroke: #ffff;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #ffff;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #ffff;
+    -fx-fill: #ffff;
+}
+
+.chart-pie-label {
+    -fx-fill: #ffff;
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+} 

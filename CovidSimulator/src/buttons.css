@@ -1,0 +1,16 @@
+.button {
+	-fx-background-color: #651e3e ;
+	-fx-text-fill: #ffff;
+	-fx-padding: 3 30 3 30;
+	-fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+}
+
+.text-field {
+	-fx-background-color: #651e3e;
+}
+
+.text-field .text {
+	-fx-stroke: #ffff;
+}
