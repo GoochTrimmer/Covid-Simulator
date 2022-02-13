@@ -1,4 +1,4 @@
-package CovidSim.model;
+package VSim.model;
 
 import javafx.scene.layout.Pane;
 

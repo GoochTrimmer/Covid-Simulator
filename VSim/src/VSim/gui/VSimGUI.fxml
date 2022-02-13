@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="945.0" style="-fx-background-color: #051e3e;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CovidSim.gui.CovidSimController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="945.0" style="-fx-background-color: #051e3e;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VSim.gui.VSimController">
    <top>
       <Label alignment="CENTER" prefWidth="172.0" text="Virus Royale" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
          <font>

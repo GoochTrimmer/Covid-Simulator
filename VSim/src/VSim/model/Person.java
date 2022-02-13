@@ -1,11 +1,11 @@
-package CovidSim.model;
+package VSim.model;
 
-import Virus.Covid;
-import Virus.Flu;
-import Virus.Multiple;
-import Virus.Recovered;
-import Virus.Susceptible;
-import Virus.Virus;
+import VSim.virus.Covid;
+import VSim.virus.Flu;
+import VSim.virus.Multiple;
+import VSim.virus.Recovered;
+import VSim.virus.Susceptible;
+import VSim.virus.Virus;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

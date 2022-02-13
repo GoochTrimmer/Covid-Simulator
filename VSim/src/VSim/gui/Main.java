@@ -1,4 +1,4 @@
-package CovidSim.gui;
+package VSim.gui;
 	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class Main extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			BorderPane root = 
-					(BorderPane)loader.load(getClass().getResource("CovidSimGUI.fxml").openStream());
+					(BorderPane)loader.load(getClass().getResource("VSimGUI.fxml").openStream());
 			primaryStage.setScene(new Scene (root));
 			primaryStage.show();
 			

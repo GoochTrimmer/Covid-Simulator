@@ -1,4 +1,4 @@
-package Virus;
+package VSim.virus;
 
 import javafx.scene.paint.Color;
 

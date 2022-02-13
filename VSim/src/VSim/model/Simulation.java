@@ -1,10 +1,10 @@
-package CovidSim.model;
+package VSim.model;
 
 import java.util.HashMap;
 
-import Virus.Covid;
-import Virus.Flu;
-import Virus.Susceptible;
+import VSim.virus.Covid;
+import VSim.virus.Flu;
+import VSim.virus.Susceptible;
 import javafx.scene.layout.Pane;
 
 public class Simulation {

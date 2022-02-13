@@ -1,17 +1,17 @@
-package CovidSim.gui;
+package VSim.gui;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import CovidSim.model.Heading;
-import CovidSim.model.Person;
-import CovidSim.model.Simulation;
-import Virus.Covid;
-import Virus.Flu;
-import Virus.Multiple;
-import Virus.Recovered;
-import Virus.Susceptible;
+import VSim.model.Heading;
+import VSim.model.Person;
+import VSim.model.Simulation;
+import VSim.virus.Covid;
+import VSim.virus.Flu;
+import VSim.virus.Multiple;
+import VSim.virus.Recovered;
+import VSim.virus.Susceptible;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,7 +33,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class CovidSimController{
+public class VSimController{
 	
 	//GUI Elements
 	

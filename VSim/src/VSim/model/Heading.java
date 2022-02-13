@@ -1,4 +1,4 @@
-package CovidSim.model;
+package VSim.model;
 
 public class Heading {
 	
