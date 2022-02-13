@@ -19,7 +19,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="945.0" style="-fx-background-color: #051e3e;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VSim.gui.VSimController">
    <top>
-      <Label alignment="CENTER" prefWidth="172.0" text="Virus Royale" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
+      <Label alignment="CENTER" prefWidth="172.0" text="VSim" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
          <font>
             <Font name="Lucida Sans Typewriter Regular" size="19.0" />
          </font>
